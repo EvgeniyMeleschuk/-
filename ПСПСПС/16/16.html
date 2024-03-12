@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <linkrel="stylesheet" href="1.css"></linkrel>
+    <title>Форма</title>
+</head>
+<body>
+    <div class="a" >
+    <form id="myForm" onsubmit="return submitForm(event)" >
+        <div >
+            <label for="name" >Имя</label><br>
+            <input type="text" id="name" required><br>
+        </div>
+        <div>
+            <label for="email">Email адрес</label><br>
+            <input type="email" id="email" required><br>
+        </div>
+        <div>
+            <p>Пол</p>
+      <p><input id="m"name="m" type="radio" value="m"> мужской</p>
+      <p><input id="z"name="z" type="radio" value="z"> женский</p>
+        </div>
+        <div>
+            <p><select id="select"name="select"></p> 
+        
+                <option value="Беларусь">Беларусь</option>
+                <option value="США" selected>США</option>
+                <option value="Германия">Германия</option>
+              </select>
+        </div>
+        <input type="submit" value="Отправить">
+    </form>
+</div>
+    <script>
+        // Функция для обработки события отправки формы
+        function submitForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const m = document.getElementById('m').value;
+            const select = document.getElementById('select').value;
+          
+            // Вывод значений формы в диалоговом окне alert
+            alert(`Имя: ${name}\nEmail: ${email}\nпол: ${m}\nстрана:${select}`);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+    // Получаем форму и все ее элементы
+    const myForm = document.getElementById('myForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const genderInputs = document.querySelectorAll('input[name="m"]');
+    const selectInput = document.getElementById('select');
+
+    // Получаем значения из localStorage и выводим их на экран
+    if (localStorage.getItem('formData')) {
+        const savedData = JSON.parse(localStorage.getItem('formData'));
+        nameInput.value = savedData.name;
+        emailInput.value = savedData.email;
+        for (const input of genderInputs) {
+            if (input.value === savedData.gender) {
+                input.checked = true;
+            }
+        }
+        selectInput.value = savedData.country;
+    }
+
+    // Обработчик события отправки формы
+    myForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Получаем значения полей формы
+        const name = nameInput.value;
+        const email = emailInput.value;
+        let gender = '';
+        for (const input of genderInputs) {
+            if (input.checked) {
+                gender = input.value;
+            }
+        }
+        const country = selectInput.value;
+
+        // Сохраняем значения в localStorage
+        const formData = {
+            name: name,
+            email: email,
+            gender: gender,
+            country: country
+        };
+        localStorage.setItem('formData', JSON.stringify(formData));
+        
+  // Сохраняем значения в cookie
+  document.cookie = `name=${name}; email=${email}; gender=${gender}; country=${country}`;
+  
+        // Выводим значения полей на экран
+        const output = `Имя: ${name}\nEmail: ${email}\nПол: ${gender}\nСтрана: ${country}`;
+        alert(output);
+    });
+});
+
+
+    </script>
+</body>
+</html>

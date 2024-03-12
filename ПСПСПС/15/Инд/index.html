@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        body{
+            margin: 30px;
+        }
+
+        #box {
+            width: 100px;
+            height: 100px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            cursor: move;
+        }
+
+        span{
+            display: inline-block;
+            margin: 300% auto 0;
+            background-color: #da6363;
+            border: 3px solid black;
+            padding: 25px;
+        }
+    </style>
+    
+    <button onclick="alert(`Событие мыши`)">нажми</button> <br> <br>
+    
+    
+    <p id="output"></p>
+
+    <div id="box" draggable="true"></div>
+
+    <span id="touchArea">ты нашёл меня :)</span>
+    <script>
+        document.addEventListener('keydown', function(event) {
+            var output = document.getElementById('output');
+            output.innerHTML = 'Вы нажали клавишу: ' + event.key;
+        });
+
+        var box = document.getElementById("box");
+
+        box.addEventListener("dragstart", function(event) {
+            event.dataTransfer.setData("text/plain", "Перетащи меня!");
+        });
+
+        box.addEventListener("dragover", function(event) {
+            event.preventDefault();
+        });
+
+        box.addEventListener("drop", function(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text/plain");
+            console.log("Перетащенный текст: ", data);
+        });
+
+        box.addEventListener("pointermove", function(event) {
+            console.log("Координаты указателя: ", event.clientX, event.clientY);
+        });
+
+        window.addEventListener("scroll", function() {
+            console.log("Страница прокручена на: ", window.scrollY, "пикселей");
+        });
+
+        const touchArea = document.querySelector('#touchArea');
+
+        touchArea.addEventListener('touchstart', function(event) {
+            console.log('Касание произошло!');
+        });
+    </script>
+</body>
+</html>
